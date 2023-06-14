@@ -7,8 +7,8 @@ const jwtGuard = async (req: Request, res: Response, next: NextFunction) => {
   if (authorization && authorization.startsWith('Bearer')) {
     try {
       const token = authorization.split(' ')[1];
-      const decoded = jwt.verify(token, env.JWT_SECRET) as { id: string };
-      req.userId = decoded.id;
+      const decoded = jwt.verify(token, env.JWT_SECRET) as User;
+      req.user = decoded;
       next();
     } catch (err) {
       return res.status(403).json({ message: 'Unauthorized' });
