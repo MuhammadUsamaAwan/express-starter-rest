@@ -4,6 +4,7 @@ config();
 
 import express, { type Request, type Response } from 'express';
 import cors from 'cors';
+import compression from 'compression';
 import errorHandler from '@/middleware/errorHandler';
 import corsOptions from '@/config/corsOptions';
 import env from '@/config/env';
@@ -15,6 +16,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors(corsOptions));
+app.use(compression());
 
 app.use('/api', controller);
 
