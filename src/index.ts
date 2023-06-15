@@ -8,8 +8,10 @@ import compression from 'compression';
 import errorHandler from '@/middleware/errorHandler';
 import corsOptions from '@/config/corsOptions';
 import env from '@/config/env';
+import connectRedis from '@/config/connectRedis';
 import controller from '@/controller';
 
+connectRedis();
 const { PORT } = env;
 const app = express();
 
