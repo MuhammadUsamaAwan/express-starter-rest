@@ -1,5 +1,4 @@
 import path from 'path';
-import { randomUUID } from 'crypto';
 import multer, { type FileFilterCallback } from 'multer';
 
 const storage = multer.diskStorage({
@@ -7,7 +6,7 @@ const storage = multer.diskStorage({
     cb(null, 'uploads/');
   },
   filename(req, file, cb) {
-    cb(null, `${file.fieldname}-${randomUUID()}${path.extname(file.originalname)}`);
+    cb(null, `${Date.now()}-${file.originalname}${path.extname(file.originalname)}`);
   },
 });
 
