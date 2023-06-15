@@ -4,7 +4,7 @@ type StaticOrigin = boolean | string | RegExp | (boolean | string | RegExp)[];
 
 const corsOptions = {
   origin: (origin: string | undefined, callback: (err: Error | null, origin?: StaticOrigin | undefined) => void) => {
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+    if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));

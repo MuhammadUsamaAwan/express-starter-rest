@@ -7,8 +7,7 @@ await build({
   bundle: true,
   minify: true,
   platform: 'node',
-  target: 'node18.16.0',
+  target: 'node18',
   packages: 'external',
-  tsconfig: 'tsconfig.json',
   plugins: [tsPaths()],
 });

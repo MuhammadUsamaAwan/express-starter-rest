@@ -20,9 +20,9 @@ export const signup = async (req: Request, res: Response) => {
 export const login = async (req: Request, res: Response) => {
   const { email, password } = loginSchema.parse(req.body);
   const [user] = await db.select({ id: users.id, password: users.password }).from(users).where(eq(users.email, email));
-  if (!user) return res.status(400).json({ message: 'Invalid Crendentials' });
+  if (!user) return res.status(400).json({ message: 'Invalid Credentials' });
   if (await verify(user.password, password)) return res.status(200).json({ accessToken: getAccessToken(user.id) });
-  res.status(400).json({ message: 'Invalid Crendentials' });
+  res.status(400).json({ message: 'Invalid Credentials' });
 };
 
 const getAccessToken = (id: string) =>

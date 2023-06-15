@@ -1,6 +1,6 @@
 import path from 'path';
 import { randomUUID } from 'crypto';
-import multer from 'multer';
+import multer, { type FileFilterCallback } from 'multer';
 
 const storage = multer.diskStorage({
   destination(req, file, cb) {
@@ -11,7 +11,7 @@ const storage = multer.diskStorage({
   },
 });
 
-function checkFileType(file: Express.Multer.File, filetypes: RegExp, cb: multer.FileFilterCallback) {
+function checkFileType(file: Express.Multer.File, filetypes: RegExp, cb: FileFilterCallback) {
   const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
   const mimetype = filetypes.test(file.mimetype);
 
@@ -23,10 +23,12 @@ function checkFileType(file: Express.Multer.File, filetypes: RegExp, cb: multer.
 }
 
 const uploadFile = (args?: { maxSize?: number; filetypes?: RegExp }) => {
+  const { maxSize = 1000000, filetypes = /jpg|jpeg|png/ } = args || {};
+
   return multer({
     storage,
-    limits: { fileSize: args?.maxSize || 1000000 },
-    fileFilter: (req, file, cb) => checkFileType(file, args?.filetypes || /jpg|jpeg|png/, cb),
+    limits: { fileSize: maxSize },
+    fileFilter: (req, file, cb) => checkFileType(file, filetypes, cb),
   });
 };
 
