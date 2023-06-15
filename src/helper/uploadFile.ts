@@ -18,7 +18,7 @@ function checkFileType(file: Express.Multer.File, filetypes: RegExp, cb: FileFil
   if (extname && mimetype) {
     return cb(null, true);
   } else {
-    cb(new Error(`Wrong File Type Provided, Allowed File Types: ${filetypes}`));
+    cb(new Error(`Wrong file type provided, allowed file types: ${filetypes}`));
   }
 }
 
