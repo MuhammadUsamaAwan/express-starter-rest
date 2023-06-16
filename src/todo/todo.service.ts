@@ -1,5 +1,4 @@
 import type { Request, Response } from 'express';
-import { randomUUID } from 'crypto';
 import { eq, and } from 'drizzle-orm';
 import db from '@/db';
 import { insertTodoSchema, updateTodoSchema, todos } from '@/schema/todos';
@@ -18,7 +17,7 @@ export const addTodo = async (req: Request, res: Response) => {
   const newTodo = insertTodoSchema.parse(req.body);
   const [todo] = await db
     .insert(todos)
-    .values({ id: randomUUID(), userId: req.user.id, ...newTodo })
+    .values({ userId: req.user.id, ...newTodo })
     .returning();
   deleteCache(`todos_${req.user.id}`);
   return res.status(201).json(todo);

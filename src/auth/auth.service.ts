@@ -1,5 +1,4 @@
 import type { Request, Response } from 'express';
-import { randomUUID } from 'crypto';
 import { hash, verify } from 'argon2';
 import jwt from 'jsonwebtoken';
 import { eq } from 'drizzle-orm';
@@ -9,12 +8,11 @@ import env from '@/config/env';
 
 export const signup = async (req: Request, res: Response) => {
   const { email, password } = signupSchema.parse(req.body);
-  const [user] = await db.select({ id: users.id }).from(users).where(eq(users.email, email));
-  if (user) return res.status(409).json({ message: 'User already exists' });
+  const [alreadyExist] = await db.select({ id: users.id }).from(users).where(eq(users.email, email));
+  if (alreadyExist) return res.status(409).json({ message: 'User already exists' });
   const hashedPassword = await hash(password);
-  const id = randomUUID();
-  await db.insert(users).values({ id, email, password: hashedPassword });
-  res.status(201).json({ accessToken: getAccessToken(id) });
+  const [user] = await db.insert(users).values({ email, password: hashedPassword }).returning({ id: users.id });
+  res.status(201).json({ accessToken: getAccessToken(user.id) });
 };
 
 export const login = async (req: Request, res: Response) => {
